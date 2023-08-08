@@ -2,7 +2,7 @@ from fastapi import FastAPI, Response
 from fastapi.middleware.cors import CORSMiddleware
 import torch
 from torch import autocast
-from diffusers import StableDiffusionPipeline
+from diffusers import DiffusionPipeline
 from io import BytesIO
 import base64
 import uvicorn 
@@ -23,14 +23,14 @@ app.add_middleware(
 device = "cuda"
 model_id_sd15 = "CompVis/stable-diffusion-v1-5"
 
-base = StableDiffusionPipeline.from_pretrained(
+base = DiffusionPipeline.from_pretrained(
     "stabilityai/stable-diffusion-xl-base-1.0", 
     torch_dtype=torch.float16, 
     variant="fp16", 
     use_safetensors=True,
 )
 base.to("cuda")
-refiner = StableDiffusionPipeline.from_pretrained(
+refiner = DiffusionPipeline.from_pretrained(
     "stabilityai/stable-diffusion-xl-refiner-1.0",
     text_encoder_2=base.text_encoder_2,
     vae=base.vae,
